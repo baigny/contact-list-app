@@ -1,4 +1,4 @@
-const BASE_URL = "http://192.168.0.109:8000";
+const BASE_URL = "https://contact-list-app-backend.onrender.com";
 
 class ApiError extends Error {
   constructor(message, status) {
