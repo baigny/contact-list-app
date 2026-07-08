@@ -66,7 +66,9 @@ app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "https://contact-list-app.netlify.app",
+        "http://192.168.0.109:5173",
+        "http://contact-list-app-baigny.netlify.app",
+        "https://contact-list-app-baigny.netlify.app",
     ],
     allow_methods=["*"],
     allow_headers=["*"],
