@@ -52,7 +52,9 @@ def test_contact_crud_scoped_to_owner():
     contact_id = res.json()["id"]
 
     res = client.get("/contacts", headers=headers)
-    assert len(res.json()) == 1
+    page = res.json()
+    assert page["total"] == 1
+    assert len(page["items"]) == 1
 
     res = client.put(
         f"/contacts/{contact_id}", json={"phone": "555-1234"}, headers=headers
