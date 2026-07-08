@@ -58,3 +58,10 @@ class ContactRead(BaseModel):
     notes: str | None
     owner_id: int
     created_at: datetime
+
+
+class ContactPage(BaseModel):
+    items: list[ContactRead]
+    total: int
+    page: int
+    page_size: int

@@ -21,6 +21,7 @@ from database import Base, SessionLocal, engine
 from models import Contact, User
 from schemas import (
     ContactCreate,
+    ContactPage,
     ContactRead,
     ContactUpdate,
     Token,
@@ -67,8 +68,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://192.168.0.109:5173",
-        "http://contact-list-app-baigny.netlify.app",
-        "https://contact-list-app-baigny.netlify.app",
+        "http://contact-list-crud-app.netlify.app",
+        "https://contact-list-crud-app.netlify.app",
     ],
     allow_methods=["*"],
     allow_headers=["*"],
@@ -194,9 +195,22 @@ def delete_user(user_id: int, current_user: CurrentUser, db: DbDep):
 # ---------- Contacts (personal CRUD) ----------
 
 
-@app.get("/contacts", response_model=list[ContactRead])
-def list_contacts(current_user: CurrentUser, db: DbDep):
-    return db.query(Contact).filter(Contact.owner_id == current_user.id).all()
+@app.get("/contacts", response_model=ContactPage)
+def list_contacts(
+    current_user: CurrentUser,
+    db: DbDep,
+    page: int = 1,
+    page_size: int = 10,
+):
+    query = db.query(Contact).filter(Contact.owner_id == current_user.id)
+    total = query.count()
+    items = (
+        query.order_by(Contact.id)
+        .offset((page - 1) * page_size)
+        .limit(page_size)
+        .all()
+    )
+    return ContactPage(items=items, total=total, page=page, page_size=page_size)
 
 
 @app.post("/contacts", response_model=ContactRead, status_code=201)

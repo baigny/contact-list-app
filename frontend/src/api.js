@@ -43,7 +43,8 @@ export const authApi = {
 };
 
 export const contactsApi = {
-  list: (token) => request("/contacts", { token }),
+  list: (token, page = 1, pageSize = 10) =>
+    request(`/contacts?page=${page}&page_size=${pageSize}`, { token }),
   create: (token, contact) => request("/contacts", { method: "POST", token, body: contact }),
   update: (token, id, contact) =>
     request(`/contacts/${id}`, { method: "PUT", token, body: contact }),
